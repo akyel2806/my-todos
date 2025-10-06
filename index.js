@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { setCookie } from "hono/cookie";
 import { getCookie } from "hono/cookie";
+import { serveStatic } from "@hono/node-server/serve-static";
 
 const app = new Hono();
 
@@ -110,10 +111,13 @@ app.get('/api/todos', async (c) => {
     }
 });
 
+app.use('/*', serveStatic({ root: './public' }));
+
 app.get("/", (c) => {
-  return c.html("<h1>Tim Pengembang</h1><h2>Nama Kalian</h2>");
+  return c.html("<h1>Tim Pengembang</h1><h2>Fathi Akyel</h2>");
 });
 
 const port = 3000;
 console.log("🚀 Server is running on http://localhost:${port}");
 serve({ fetch: app.fetch, port });
+
