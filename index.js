@@ -73,6 +73,12 @@ app.get("/api/me", (c) => {
   }
 });
 
+// API Logout
+app.post('/logout', (c) => {
+    setCookie(c, 'token', '', { maxAge: -1});
+    return c.json({ success: true, message: 'Logout Berhasil' });
+});
+
 app.get("/", (c) => {
   return c.html("<h1>Tim Pengembang</h1><h2>Nama Kalian</h2>");
 });
