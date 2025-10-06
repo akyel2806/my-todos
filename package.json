@@ -16,9 +16,11 @@
   "dependencies": {
     "@hono/node-server": "^1.19.5",
     "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
     "hono": "^4.9.10",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3"
   },
   "devDependencies": {
