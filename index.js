@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { db } from "./db/index.js";
-import { users } from "./db/schema.js";
+import { users,todos } from "./db/schema.js";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import bcrypt from "bcryptjs";
@@ -77,6 +77,22 @@ app.get("/api/me", (c) => {
 app.post('/logout', (c) => {
     setCookie(c, 'token', '', { maxAge: -1});
     return c.json({ success: true, message: 'Logout Berhasil' });
+});
+
+// API Menambah Todo
+app.post('/api/todos', async (c) => {
+  const token = getCookie(c, 'token');
+    if (!token) return c.json({ success: false, message: 'Unauthorized' }, 401);
+    try {
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+         const { note } = await c.req.json();
+    const newTodo = await db.insert(todos)
+        .values({ note, userId: user.id })
+        .returning();
+    return c.json({ success: true, data: newTodo[0] }, 201);
+    } catch (error) {
+        return c.json({ success: false, message: 'Unauthorized' }, 401);
+    }
 });
 
 app.get("/", (c) => {
