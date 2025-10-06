@@ -95,6 +95,21 @@ app.post('/api/todos', async (c) => {
     }
 });
 
+// API Melihat semua Todo milik User
+app.get('/api/todos', async (c) => {
+    const token = getCookie(c, 'token');
+    if(!token) return c.json({ success: false, message: 'Unauthorized' }, 401);
+    try {
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+        const userTodos = await db.query.todos.findMany({
+            where: (todos, {eq}) => eq(todos.userId, user.id)
+        });
+        return c.json({ success: true, data: userTodos });
+    } catch (error) {
+        return c.json({ success: false, message: 'Unauthorized' }, 401);
+    }
+});
+
 app.get("/", (c) => {
   return c.html("<h1>Tim Pengembang</h1><h2>Nama Kalian</h2>");
 });
